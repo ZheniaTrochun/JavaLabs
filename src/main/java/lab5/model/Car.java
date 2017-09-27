@@ -12,6 +12,9 @@ public abstract class Car extends Toy {
         this.size = size;
     }
 
+    public Car() {
+    }
+
     public double getSize() {
         return size;
     }

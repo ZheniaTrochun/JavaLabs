@@ -11,6 +11,10 @@ public abstract class Toy implements Serializable {
     protected String name;
     protected String color;
 
+    public Toy() {
+        price = 10;
+    }
+
     public Toy(double price, String name, String color) {
         this.price = price;
         this.name = name;
@@ -57,6 +61,15 @@ public abstract class Toy implements Serializable {
 //        return getName().equals(((Toy)obj).getName()) && (getPrice() == ((Toy)obj).getPrice());
 //    }
 
+
+    @Override
+    public String toString() {
+        return "Toy{" +
+                "price=" + price +
+                ", name='" + name + '\'' +
+                ", color='" + color + '\'' +
+                '}';
+    }
 
     @Override
     public boolean equals(Object o) {

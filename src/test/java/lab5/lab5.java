@@ -16,7 +16,7 @@ public class lab5 {
 
     @Test(expected = InvalidInputDataException.class)
     public void testCreatingRoomNegative() throws IllegalAccessException, InvalidInputDataException, InstantiationException {
-        Assert.assertNotNull(new GameRoom(10, 15));
+        Assert.assertNotNull(new GameRoom(10, 150));
     }
 
     @Test(expected = InvalidInputDataException.class)

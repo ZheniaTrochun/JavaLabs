@@ -3,14 +3,7 @@ package lab8;
 import lab5.model.*;
 import lab6_7.MySet;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
+import java.io.*;
 import java.util.*;
 
 /**
@@ -19,36 +12,93 @@ import java.util.*;
 public class ToySerializator {
     private static Map<String, Class<? extends Toy>> toyMap = createToyMap();
 
-    public static MySet setReader(String path) throws IOException {
+    public static MySet readSetBin(String path) {
+        MySet set = null;
+
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(path))) {
+
+            set = (MySet)ois.readObject();
+        } catch (ClassNotFoundException | IOException e) {
+            e.printStackTrace();
+        }
+
+        return set;
+    }
+
+    public static void writeSetBin(MySet mySet, String path)  {
+        try (ObjectOutputStream writer = new ObjectOutputStream(new FileOutputStream(path))) {
+
+            writer.writeObject(mySet);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static MySet readSetByElements(String path) {
+        MySet set = new MySet();
+
+        try (ObjectInputStream reader = new ObjectInputStream(new FileInputStream(path))) {
+
+            Object toy = reader.readObject();
+
+            while (toy != null) {
+                set.add((Toy)toy);
+
+                toy = reader.readObject();
+            }
+        } catch (EOFException e) {
+
+        } catch (ClassNotFoundException | IOException e) {
+            e.printStackTrace();
+        }
+
+        return set;
+    }
+
+    public static void writeSetByElements(MySet mySet, String path) {
+        try (ObjectOutputStream writer = new ObjectOutputStream(new FileOutputStream(path))) {
+
+            for (Toy t: mySet) {
+                writer.writeObject(t);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public static MySet readSet(String path) {
         MySet res = new MySet();
 
-        List<String> lines = Files.readAllLines(Paths.get(path));
+        try(BufferedReader reader = new BufferedReader(new FileReader(path))) {
+            String line = reader.readLine();
 
-        Cube.serialize(lines.get(0));
+            while (line != null && !line.isEmpty()) {
+                String[] lineParts = line.split("\\|");
 
-        lines.forEach(l -> {
-            try {
-                res.add(toyMap.get(l.split("\\|")[0].trim())
-                        .newInstance()
-                        .convertFromString(l.split("\\|")[1].trim()));
-            } catch (InstantiationException | IllegalAccessException e) {
-                e.printStackTrace();
+                if (lineParts.length == 2) {
+                    res.add(toyMap.get(lineParts[0].trim())
+                            .newInstance()
+                            .convertFromString(lineParts[1].trim()));
+                }
+
+                line = reader.readLine();
             }
-        });
+        } catch (IOException | InstantiationException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
 
         return res;
     }
 
-    public static void writeSetToFile(MySet mySet, String path) throws IOException {
-
+    public static void writeSet(MySet mySet, String path) {
         try(BufferedWriter writer = new BufferedWriter(new FileWriter(path))) {
-            mySet.stream().forEach(t -> {
-                try {
-                    writer.write(t.writeToFile());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            });
+
+            for (Toy t: mySet) {
+                writer.write(t.writeToFile());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

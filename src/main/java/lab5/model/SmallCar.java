@@ -8,14 +8,22 @@ public class SmallCar extends Car {
         super(price, name, color, size);
     }
 
+    public SmallCar() {
+    }
+
     @Override
-    public Toy convertFromString(String s) {
+    public SmallCar convertFromString(String s) {
         String[] strs = s.split(", ");
 
         if (strs.length != 4)
             return null;
 
-        return new SmallCar(strs[0], Double.parseDouble(strs[1]), strs[2], Double.parseDouble(strs[1]));
+        name = strs[0];
+        price = Double.parseDouble(strs[1]);
+        color = strs[2];
+        size = Double.parseDouble(strs[3]);
+
+        return this;
     }
 
     @Override
@@ -24,6 +32,6 @@ public class SmallCar extends Car {
                 + this.name + ", "
                 + this.price + ", "
                 + this.color + ", "
-                + this.size;
+                + this.size + "\n";
     }
 }

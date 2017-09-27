@@ -337,6 +337,10 @@ public class MySet implements Set<Toy>, Serializable {
         return true;
     }
 
+    public Toy get(int i) {
+        return (i >= 0 && i < size) ? toys[i] : null;
+    }
+
     /**
      * Returns an array containing all of the elements in this set; the
      * runtime type of the returned array is that of the specified array.

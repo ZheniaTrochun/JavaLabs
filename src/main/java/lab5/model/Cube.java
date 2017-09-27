@@ -10,14 +10,22 @@ public class Cube  extends Toy {
         super(price, name, color);
     }
 
+    public Cube() {
+    }
+
     @Override
-    public Toy convertFromString(String s) {
+    public Cube convertFromString(String s) {
         String[] strs = s.split(", ");
 
         if (strs.length != 3)
             return null;
 
-        return new Cube(strs[0], Double.parseDouble(strs[1]), strs[2]);
+        name = strs[0];
+        price = Double.parseDouble(strs[1]);
+        color = strs[2];
+
+        return this;
+//        return new Cube(strs[0], Double.parseDouble(strs[1]), strs[2]);
     }
 
     @Override
@@ -25,6 +33,6 @@ public class Cube  extends Toy {
         return this.getClass().getName() + " | "
                 + this.name + ", "
                 + this.price + ", "
-                + this.color;
+                + this.color + "\n";
     }
 }

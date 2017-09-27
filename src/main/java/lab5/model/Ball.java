@@ -12,6 +12,9 @@ public class Ball extends Toy {
         this.diameter = diameter;
     }
 
+    public Ball() {
+    }
+
     public double getDiameter() {
         return diameter;
     }
@@ -21,13 +24,18 @@ public class Ball extends Toy {
     }
 
     @Override
-    public Toy convertFromString(String s) {
+    public Ball convertFromString(String s) {
         String[] strs = s.split(", ");
 
         if (strs.length != 4)
             return null;
 
-        return new Ball(strs[0], Double.parseDouble(strs[1]), strs[2], Double.parseDouble(strs[1]));
+        name = strs[0];
+        price = Double.parseDouble(strs[1]);
+        color = strs[2];
+        diameter = Double.parseDouble(strs[3]);
+
+        return this;
     }
 
     @Override
@@ -36,6 +44,6 @@ public class Ball extends Toy {
                 + this.name + ", "
                 + this.price + ", "
                 + this.color + ", "
-                + this.diameter;
+                + this.diameter + "\n";
     }
 }
